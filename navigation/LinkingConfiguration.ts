@@ -1,8 +1,8 @@
 import * as Linking from 'expo-linking';
-
 export default {
   prefixes: [Linking.makeUrl('/')],
   config: {
+    initialRouteName: '',
     screens: {
       Login: 'login',
       Root: {
@@ -10,7 +10,7 @@ export default {
           TabOne: {
             screens: {
               TabOneScreen: 'one',
-              RecordList:'rec-list',
+              RecordList: 'rec-list',
               Report: 'report',
             },
           },
@@ -23,5 +23,5 @@ export default {
       },
       NotFound: '*',
     },
-  },
+  }
 };

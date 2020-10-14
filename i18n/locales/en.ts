@@ -78,7 +78,7 @@ export default {
   "dating-msg-toast-btn": "Undo",
   "dating-no-scope": "There is no optional time.",
 
-  "loading": "Loading--.",
+  "loading": "Loading...",
 
   "login-pge-title": "User Register/login",
   "login-title": "Health Management",
