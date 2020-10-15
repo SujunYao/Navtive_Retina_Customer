@@ -27,42 +27,51 @@ const defHeaderSetting = {
   headerTitleStyle: styles.headerTitle
 };
 
-function RootNavigator() {
-  return (
-    <Stack.Navigator>
-      <Stack.Screen name="Login" component={Login} options={{
-        ...defHeaderSetting,
-        title: I18n.t('login-pge-title')
-      }} />
-      <Stack.Screen name="Root" component={Home} options={{
-        ...defHeaderSetting,
-        title: I18n.t('home-pge-title')
-      }} />
-      <Stack.Screen name="NotFound" component={NotFoundScreen} options={{ title: 'Oops!' }} />
-      {/* <Stack.Screen name="NotFound" component={NotFoundScreen} options={{ title: 'Oops!' }} /> */}
-    </Stack.Navigator>
-  );
-}
-
-
-// If you are not familiar with React Navigation, we recommend going through the
+// If you are not familiar with React Navigation, you can going through the
 // "Fundamentals" guide: https://reactnavigation.org/docs/getting-started
 function Navigation({ colorScheme }: { colorScheme: ColorSchemeName }) {
   const system = useSelector((state: RootState) => state.system);
-  const Linking = {...LinkingConfiguration};
-  if(!system.openID){
-    Linking.config.initialRouteName = 'Login';
-  }else if(system.lockRoute && system.tgtRoutName){
-    Linking.config.initialRouteName = system.tgtRoutName;
-  }else if(system.loggedIn){
-    Linking.config.initialRouteName = 'Home';
-  }
-  console.log(Linking);
+
+  const rednerNavigations = () => { };
+
   return (
     <NavigationContainer
-      linking={Linking}
+      linking={{
+        ...LinkingConfiguration,
+        // getPathFromState(state: any, config: any): string {
+        //   console.log(state);
+        //   console.log(config);
+        //   return state.routes[0].name;
+        // }
+      }}
       theme={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-      <RootNavigator />
+      <Stack.Navigator>
+        {rednerNavigations()}
+        {(!system.openID
+          && !(system.readonly && system.routeName)
+          || (system.openID && !system.loggedIn))
+          && <Stack.Screen
+            name="Login"
+            component={Login}
+            initialParams={{ token: system.keepToken }}
+            options={{
+              ...defHeaderSetting,
+              title: I18n.t('login-pge-title')
+            }} /> || <></>}
+        {system.openID
+          && system.loggedIn
+          && !system.routeName
+          && <Stack.Screen
+            name="Root"
+            component={Home}
+            initialParams={{ token: system.keepToken }}
+            options={{
+              ...defHeaderSetting,
+              title: I18n.t('home-pge-title')
+            }} /> || <></>}
+        <Stack.Screen name="NotFound" component={NotFoundScreen} options={{ title: 'Oops!' }} />
+        {/* <Stack.Screen name="NotFound" component={NotFoundScreen} options={{ title: 'Oops!' }} /> */}
+      </Stack.Navigator>
     </NavigationContainer>
   );
 }

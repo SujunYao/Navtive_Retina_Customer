@@ -23,10 +23,18 @@ export enum PWD_STATE {
 
 export enum STOREAGE_KEYS { // base64
   OPENID = 'b3BlbklE',
-  NO_LOGIN = 'Tk9fTE9HSU4',
-  REDIRECT = 'cmVkaXJlY3Q',
-  RROUTE = 'cmVkaXJlY3Qgcm91dGU', // redirect route name
-  RROUTEPARAMS = 'cmVkaXJlY3Qgcm91dGUgcGFyYW1z', // redirect route params
+  NO_NEED_LOGIN = 'Tk9fTE9HSU4',
+  LOCK_ROUTE = 'cmVkaXJlY3Q',
+  R_ROUTE = 'cmVkaXJlY3Qgcm91dGU', // redirect route name
+  R_ROUTE_PARAMS = 'cmVkaXJlY3Qgcm91dGUgcGFyYW1z', // redirect route params
+  KEEP_TOKEN = 'a2VlcFRva2Vu'
+}
+
+export enum URL_PARAMS {
+  OPENID = 'openid',
+  NO_NEED_LOGIN = 'no_login',
+  LOCK_ROUTE = 'redirect',
+  ID = 'id'
 }
 
 export enum NO_LOGIN_VALS {

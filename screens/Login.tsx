@@ -27,7 +27,7 @@ export default function Login({ navigation }: Props) {
       <Text>{I18n.t('login-desc')}</Text>
       <Button
         title="Go to HOME"
-        onPress={() => navigation.navigate('Root')}
+        onPress={() => navigation.navigate('Root', { token: '' })}
       />
     </View>
   </View>;

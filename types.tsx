@@ -1,18 +1,19 @@
+
 export type RootStackParamList = {
-  Root: undefined;
-  Login: undefined;
+  Root: { token: string };
+  Login: { token: string };
   NotFound: undefined;
 };
 
 export type BottomTabParamList = {
-  TabOne: undefined;
-  TabTwo: undefined;
+  TabOne: { token: string };
+  TabTwo: { token: string };
 };
 
 export type TabOneParamList = {
-  TabOneScreen: undefined;
+  TabOneScreen: { token: string };
 };
 
 export type TabTwoParamList = {
-  TabTwoScreen: undefined;
+  TabTwoScreen: { token: string };
 };

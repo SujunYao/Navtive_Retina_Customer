@@ -1,23 +1,35 @@
+import token from './token';
+import sessionStore from './sessionStorage';
+import offlineAccessList from '../../navigation/offlineAccessRoutes';
 import { SystemState, SystemActionTypes, UPDATE_SESSION } from './types'
-import { STOREAGE_KEYS, NO_LOGIN_VALS, REDIRECT_VALS } from '../enum';
 
-const opeID = sessionStorage.getItem(STOREAGE_KEYS.OPENID) || '';
-const loggedIn = opeID && sessionStorage.getItem(STOREAGE_KEYS.NO_LOGIN) === NO_LOGIN_VALS.TRUE;
-const redirectRoute = sessionStorage.getItem(STOREAGE_KEYS.RROUTE) || '';
-const redirectRouteParams = JSON.parse(sessionStorage.getItem(STOREAGE_KEYS.RROUTEPARAMS) || '{}');
+const urlTokenVals = token();
+const sessionStoreVals = sessionStore.getSessionStore();
+
+const openID = urlTokenVals.openID || sessionStoreVals.openID || '';
+const loggedIn = urlTokenVals.noNeedLogin || sessionStoreVals.noNeedLogin || false;
+const routeParams = urlTokenVals.rRouteParams || sessionStoreVals.rRouteParams || {};
+const routeName = urlTokenVals.rRouteName || sessionStoreVals.rRouteName || '';
+const lockRoute = urlTokenVals.lockRoute || sessionStoreVals.lockRoute || false;
+const readonly = openID === '' && offlineAccessList.indexOf(routeName) >= 0;
+const keepToken = urlTokenVals.keepToken || sessionStoreVals.keepToken || '';
 
 const initialState: SystemState = {
-  loggedIn: loggedIn || false,
-  session: '',
-  openID: opeID || '',
-  routeParams: redirectRouteParams,
-  tgtRoutName: redirectRoute || '',
-  readonly: (!opeID && redirectRoute && true) || false,
-  lockRoute: (redirectRoute && true) || false,
+  loggedIn,
+  openID,
+  routeParams,
+  routeName,
+  readonly,
+  keepToken,
+  lockRoute,
   pid: ''
 }
 
-// console.log(333);
+if (urlTokenVals.openID) {
+  sessionStore.setSessionStore(urlTokenVals);
+}
+
+console.log(initialState);
 
 export function systemReducer(
   state = initialState,
