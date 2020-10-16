@@ -23,11 +23,11 @@ export default function Login({ navigation }: Props) {
     </View>
     <View style={styles.headerCon}>
       <Image style={styles.voxelcloudLogo} source={require("../assets/images/logo.svg")} />
-      <Text>{I18n.t('login-title')}</Text>
-      <Text>{I18n.t('login-desc')}</Text>
+      <Text style={styles.title}>{I18n.t('login-title')}</Text>
+      <Text style={styles.desc}>{I18n.t('login-desc')}</Text>
       <Button
         title="Go to HOME"
-        onPress={() => navigation.navigate('Root', { token: '' })}
+        onPress={() => navigation.navigate('RecordList', { token: '' })}
       />
     </View>
   </View>;

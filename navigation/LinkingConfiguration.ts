@@ -4,23 +4,27 @@ export default {
   config: {
     screens: {
       Login: 'login',
-      Root: {
+      Home: {
         screens: {
-          TabOne: {
+          Main: {
             screens: {
-              TabOneScreen: 'one',
-              RecordList: 'rec-list',
-              Report: 'report',
+              MainScreen: 'main',
             },
           },
-          TabTwo: {
+          Setting: {
             screens: {
-              TabTwoScreen: 'two',
+              SettingScreen: 'setting',
             },
           },
         },
+        navigationOptions: {
+          // ...TransitionPresets.SlideFromRightIOS,
+          gestureDirection: 'vertical',
+        },
       },
+      RecordList: 'rec-list',
+      Report: 'report',
       NotFound: '*',
-    },
+    }
   }
 };

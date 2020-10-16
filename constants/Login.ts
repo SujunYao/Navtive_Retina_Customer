@@ -1,4 +1,5 @@
 import { StyleSheet } from 'react-native';
+import Colors from './Colors';
 export default StyleSheet.create({
   con: {
     flex: 1,
@@ -25,7 +26,27 @@ export default StyleSheet.create({
   },
 
   voxelcloudLogo: {
-    width: 200,
-    height: 200,
+    margin: 'auto',
+    marginTop: 15,
+    width: 107,
+    height: 18,
+  },
+
+  title: {
+    fontSize: 34,
+    fontFamily: 'Noto Sans CJK TC',
+    margin: 'auto',
+    marginTop: 7,
+    textAlign:"center",
+    color: Colors.light.primaryColor,
+  },
+  desc:{
+    fontSize: 12,
+    fontFamily: 'Noto Sans CJK TC',
+    margin: 'auto',
+    textAlign: 'center',
+    marginTop: 3,
+    lineHeight: 18,
+    color: '#9B9B9B'
   }
 });

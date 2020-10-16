@@ -1,33 +1,40 @@
 import { Ionicons } from '@expo/vector-icons';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createStackNavigator } from '@react-navigation/stack';
+import { useSelector, useDispatch } from 'react-redux';
 import * as React from 'react';
 
 import Colors from '../constants/Colors';
 import useColorScheme from '../hooks/useColorScheme';
-import TabOneScreen from '../screens/TabOneScreen';
-import TabTwoScreen from '../screens/TabTwoScreen';
-import { BottomTabParamList, TabOneParamList, TabTwoParamList } from '../types';
+import MainScreen from '../screens/Main';
+import SettingScreen from '../screens/Setting';
+import { BottomTabParamList, MainParamList, SettingParamList } from '../types';
+import { SystemState } from '../store/system/types';
+
+interface RootState {
+  system: SystemState
+}
 
 const BottomTab = createBottomTabNavigator<BottomTabParamList>();
 
 export default function Home() {
   const colorScheme = useColorScheme();
-
   return (
     <BottomTab.Navigator
-      initialRouteName="TabOne"
+      initialRouteName="Main"
       tabBarOptions={{ activeTintColor: Colors[colorScheme].tint }}>
       <BottomTab.Screen
-        name="TabOne"
+        name="Main"
         component={TabOneNavigator}
+       
         options={{
           tabBarIcon: ({ color }) => <TabBarIcon name="ios-code" color={color} />,
         }}
       />
       <BottomTab.Screen
-        name="TabTwo"
+        name="Setting"
         component={TabTwoNavigator}
+        // initialParams={{ token: system.keepToken }}
         options={{
           tabBarIcon: ({ color }) => <TabBarIcon name="ios-code" color={color} />,
         }}
@@ -44,30 +51,32 @@ function TabBarIcon(props: { name: string; color: string }) {
 
 // Each tab has its own navigation stack, you can read more about this pattern here:
 // https://reactnavigation.org/docs/tab-based-navigation#a-stack-navigator-for-each-tab
-const TabOneStack = createStackNavigator<TabOneParamList>();
+const MainStack = createStackNavigator<MainParamList>();
 
 function TabOneNavigator() {
+  const system = useSelector((state: RootState) => state.system);
   return (
-    <TabOneStack.Navigator>
-      <TabOneStack.Screen
-        name="TabOneScreen"
-        component={TabOneScreen}
+    <MainStack.Navigator>
+      <MainStack.Screen
+        name="MainScreen"
+        initialParams={{ token: system.keepToken }}
+        component={MainScreen}
         options={{ headerTitle: 'Tab One Title' }}
       />
-    </TabOneStack.Navigator>
+    </MainStack.Navigator>
   );
 }
 
-const TabTwoStack = createStackNavigator<TabTwoParamList>();
+const SettingStack = createStackNavigator<SettingParamList>();
 
 function TabTwoNavigator() {
   return (
-    <TabTwoStack.Navigator>
-      <TabTwoStack.Screen
-        name="TabTwoScreen"
-        component={TabTwoScreen}
+    <SettingStack.Navigator>
+      <SettingStack.Screen
+        name="SettingScreen"
+        component={SettingScreen}
         options={{ headerTitle: 'Tab Two Title' }}
       />
-    </TabTwoStack.Navigator>
+    </SettingStack.Navigator>
   );
 }

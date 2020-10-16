@@ -55,7 +55,7 @@ export default (): TOKEN_PARAMS => {
     // Hide the security data in URL;
     tokenParams.delete(URL_PARAMS.OPENID);
     tokenParams.delete(URL_PARAMS.NO_NEED_LOGIN);
-    res.keepToken = decodeURIComponent(tokenParams.toString());
+    res.keepToken = Buffer.from(decodeURIComponent(tokenParams.toString()) || '', 'binary').toString('base64');
   }
   return res;
 };

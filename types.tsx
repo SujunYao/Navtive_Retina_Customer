@@ -1,19 +1,21 @@
 
 export type RootStackParamList = {
-  Root: { token: string };
+  Home: { token: string };
   Login: { token: string };
+  RecordList: { token: string };
+  Report: { token: string };
   NotFound: undefined;
 };
 
 export type BottomTabParamList = {
-  TabOne: { token: string };
-  TabTwo: { token: string };
+  Main: { token: string };
+  Setting: { token: string };
 };
 
-export type TabOneParamList = {
-  TabOneScreen: { token: string };
+export type MainParamList = {
+  MainScreen: { token: string };
 };
 
-export type TabTwoParamList = {
-  TabTwoScreen: { token: string };
+export type SettingParamList = {
+  SettingScreen: { token: string };
 };
