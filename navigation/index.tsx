@@ -1,8 +1,10 @@
 import { NavigationContainer, DefaultTheme, DarkTheme } from '@react-navigation/native';
 import { createStackNavigator, HeaderStyleInterpolators, TransitionSpecs, TransitionPresets, StackCardInterpolationProps, StackCardInterpolatedStyle, CardStyleInterpolators } from '@react-navigation/stack';
 import React, { memo } from 'react';
-import { ColorSchemeName } from 'react-native';
+import Colors from '../constants/Colors';
+import { Animated, ColorSchemeName, Easing } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
+import StickyParallaxHeader from 'react-native-sticky-parallax-header';
 
 import NotFoundScreen from '../screens/NotFoundScreen';
 import { RootStackParamList } from '../types';
@@ -30,169 +32,75 @@ enum ROUTE_PATH_NAME {
 // A root stack navigator is often used for displaying modals on top of all other content
 // Read more here: https://reactnavigation.org/docs/modal
 const Stack = createStackNavigator<RootStackParamList>();
-const defHeaderSetting = {
-  headerStyle: styles.headerCon,
-  headerTintColor: 'rgba(99, 125, 129, 1)',
-  headerTitleStyle: styles.headerTitle
+
+const config: TransitionSpec = {
+  animation: 'timing',
+  config: {
+    duration: 300,
+    easing: Easing.bezier(0.7, 0, 0, 0.8),
+  }
+};
+
+/**
+ * setting the transition for switching the routes
+ * @Sujun
+**/
+const cardStyleInterpolatorFn = ({ current, next, inverted, layouts }: StackCardInterpolationProps): StackCardInterpolatedStyle => {
+  return {
+    cardStyle: {
+      transform: [
+        {
+          translateY: next && next.progress.interpolate({
+            inputRange: [0, 1],
+            outputRange: [0, layouts.screen.height],
+          }) || current.progress.interpolate({
+            inputRange: [0, 1],
+            outputRange: [layouts.screen.height, 0],
+          })
+        },
+      ],
+      opacity: next && next.progress.interpolate({
+        inputRange: [0, 1],
+        outputRange: [.8, 1],
+      }) || current.progress.interpolate({
+        inputRange: [0, 1],
+        outputRange: [.8, 1],
+      }),
+    },
+  };
 };
 
 // If you are not familiar with React Navigation, you can going through the
 // "Fundamentals" guide: https://reactnavigation.org/docs/getting-started
 function Navigation({ colorScheme }: { colorScheme: ColorSchemeName }) {
-  const system = useSelector((state: RootState) => state.system);
-
-  // // const rednerNavigations = () => { };
-  // const test: Object = {
-  //   gestureDirection: 'horizontal',
-  //   transitionSpec: {
-  //     open: TransitionSpecs.TransitionIOSSpec,
-  //     close: TransitionSpecs.TransitionIOSSpec,
-  //   },
-  //   headerStyleInterpolator: HeaderStyleInterpolators.forFade,
-  //   // ...TransitionPresets.ModalSlideFromBottomIOS,
-  //   cardStyleInterpolator: ({ current, next, layouts }: StackCardInterpolationProps): StackCardInterpolatedStyle => {
-  //     return {
-  //       cardStyle: {
-  //         transform: [
-  //           {
-  //             time: '200ms',
-  //             translateY: current.progress.interpolate({
-  //               inputRange: [0, 1],
-  //               outputRange: [-layouts.screen.height, 0],
-  //             }),
-  //           },
-  //           // {
-  //           //   rotate: current.progress.interpolate({
-  //           //     inputRange: [0, 1],
-  //           //     outputRange: [1, 0],
-  //           //   }),
-  //           // },
-  //           {
-  //             scale: next
-  //               ? next.progress.interpolate({
-  //                 inputRange: [0, 1],
-  //                 outputRange: [1, 0.9],
-  //               })
-  //               : 1,
-  //           },
-  //         ],
-  //       },
-  //       overlayStyle: {
-  //         opacity: current.progress.interpolate({
-  //           inputRange: [0, 1],
-  //           outputRange: [0, -layouts.screen.height],
-  //         }),
-  //       },
-  //     }
-  //   }
-  // };
-
-  const config: TransitionSpec = {
-    animation: 'timing',
-    config: {
-      duration: 200,
-      // delay: 200
-    },
+  const defHeaderSetting = {
+    headerStyle: styles.headerCon,
+    headerTintColor:  colorScheme && Colors[colorScheme].headerBg || '',
+    headerTitleStyle: styles.headerTitle,
   };
+  const system = useSelector((state: RootState) => state.system);
   return (
     <NavigationContainer
       linking={LinkingConfiguration}
       theme={colorScheme === 'dark' ? DarkTheme : DefaultTheme} >
       <Stack.Navigator screenOptions={{
-        gestureEnabled: true,
-        ...TransitionPresets.ModalSlideFromBottomIOS,
-        gestureDirection: 'vertical',
+        animationEnabled: true,
+        ...defHeaderSetting,
+        // headerStyle:{
+        //   position: 'sticky',
+        // },
+        gestureDirection: 'vertical-inverted',
+        transitionSpec: {
+          open: config,
+          close: config,
+        },
         headerStyleInterpolator: HeaderStyleInterpolators.forFade,
-        cardStyleInterpolator: ({ current, next, layouts }: StackCardInterpolationProps): StackCardInterpolatedStyle => {
-          console.log(next);
-          return {
-            cardStyle: {
-              'transition-duration': '2000ms',
-              'transition-timing-function': 'cubic-bezier(0.7, 0, 0, 0.8)',
-              transform: [
-                {
-                  translateY: current.progress.interpolate({
-                    inputRange: [0, .9, 1],
-                    outputRange: next && [0, -layouts.screen.height] || [-layouts.screen.height, 0],
-                  }),
-                },
-              ],
-              opacity: current.progress.interpolate({
-                inputRange: [0, 1],
-                outputRange: [1, 1],
-              }),
-            },
-            overlayStyle: {
-              'transition-duration': '2000ms',
-              'transition-timing-function': 'cubic-bezier(0.7, 0, 0, 0.8)',
-              transform: [
-                {
-                  translateY: current.progress.interpolate({
-                    inputRange: [0, 1],
-                    outputRange: [-layouts.screen.height, 0] //: [0, -layouts.screen.height],
-                  }),
-                }
-              ],
-              opacity: current.progress.interpolate({
-                inputRange: [0, 1],
-                outputRange: [1, 1],
-              }),
-            },
-          };
-        }
+        cardStyleInterpolator: cardStyleInterpolatorFn
       }}
-        mode="modal">
-        <Stack.Screen
-          name="Login"
-          component={Login}
-          initialParams={{ token: system.keepToken }}
-          options={{
-            ...defHeaderSetting,
-            title: I18n.t('login-pge-title')
-          }} />
-        <Stack.Screen
-          name="RecordList"
-          component={RecordList}
-          initialParams={{ token: system.keepToken }}
-          // animationTypeForReplace="pop"
-          options={{
-            ...defHeaderSetting,
-            title: I18n.t('home-pge-title')
-          }} />
-        <Stack.Screen
-          name="Home"
-          component={Home}
-          initialParams={{ token: system.keepToken }}
-          options={{
-            ...defHeaderSetting,
-            title: I18n.t('home-pge-title'),
-            // transitionSpec: {
-            //   open: {
-            //     animation: 'spring',
-            //     config: {
-            //       stiffness: 1000,
-            //       damping: 500,
-            //       mass: 3,
-            //       overshootClamping: true,
-            //       restDisplacementThreshold: 0.01,
-            //       restSpeedThreshold: 0.01,
-            //     }
-            //   },
-            //   close: {
-            //     animation: 'spring',
-            //     config: {
-            //       stiffness: 1000,
-            //       damping: 500,
-            //       mass: 3,
-            //       overshootClamping: true,
-            //       restDisplacementThreshold: 0.01,
-            //       restSpeedThreshold: 0.01,
-            //     }
-            //   }
-            // }
-          }} />
+        headerMode='float'
+        mode='modal'>
         {/* {rednerNavigations()} */}
-        {/* {
+        {
           (!system.openID
             && !(system.readonly && system.routeName)
             || (system.openID && !system.loggedIn))
@@ -201,7 +109,6 @@ function Navigation({ colorScheme }: { colorScheme: ColorSchemeName }) {
             component={Login}
             initialParams={{ token: system.keepToken }}
             options={{
-              ...defHeaderSetting,
               title: I18n.t('login-pge-title')
             }} /> || <></>
         }
@@ -213,7 +120,6 @@ function Navigation({ colorScheme }: { colorScheme: ColorSchemeName }) {
             component={Home}
             initialParams={{ token: system.keepToken }}
             options={{
-              ...defHeaderSetting,
               title: I18n.t('home-pge-title'),
             }} />
         }
@@ -224,9 +130,7 @@ function Navigation({ colorScheme }: { colorScheme: ColorSchemeName }) {
             name="RecordList"
             component={RecordList}
             initialParams={{ token: system.keepToken }}
-            // animationTypeForReplace="pop"
             options={{
-              ...defHeaderSetting,
               title: I18n.t('home-pge-title')
             }} />
         }
@@ -238,11 +142,10 @@ function Navigation({ colorScheme }: { colorScheme: ColorSchemeName }) {
             component={Report}
             initialParams={{ token: system.keepToken }}
             options={{
-              ...defHeaderSetting,
               title: I18n.t('home-pge-title')
             }} />
-        } */}
-        <Stack.Screen name="NotFound" component={NotFoundScreen} options={{ title: 'Oops!' }} />
+        }
+        <Stack.Screen name="NotFound" component={NotFoundScreen}/>
       </Stack.Navigator >
     </NavigationContainer >
   );

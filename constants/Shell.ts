@@ -1,17 +1,21 @@
 import { StyleSheet } from 'react-native';
+import Colors from './Colors';
 export default StyleSheet.create({
   shellCon: {
     flex: 1,
     width: '100%',
     height: '100%',
+    backgroundColor: Colors.light.background,
   },
   headerCon:{
     flex: 0.3,
-    // borderWidth: 5,
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
     borderBottomLeftRadius: 13,
     borderBottomRightRadius: 13,
     backgroundColor: 'rgba(221, 235, 240, 1)',
-    // color: 'rgba(99, 125, 129, 1)',
     height: 48,
   },
   headerTitle:{
@@ -40,5 +44,8 @@ export default StyleSheet.create({
     margin: 'auto',
     resizeMode: 'center',
     justifyContent: 'center',
+  },
+  transition:{
+
   }
 });

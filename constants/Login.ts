@@ -6,6 +6,11 @@ export default StyleSheet.create({
     flexDirection: 'column',
     width: '100%',
     height: '100%',
+    // top: -20,
+    paddingTop: 20,
+    bottom: 0,
+    // position: 'relative',
+    // overflow: 'scroll',
   },
 
   bgCon: {
@@ -37,10 +42,10 @@ export default StyleSheet.create({
     fontFamily: 'Noto Sans CJK TC',
     margin: 'auto',
     marginTop: 7,
-    textAlign:"center",
+    textAlign: "center",
     color: Colors.light.primaryColor,
   },
-  desc:{
+  desc: {
     fontSize: 12,
     fontFamily: 'Noto Sans CJK TC',
     margin: 'auto',
@@ -48,5 +53,9 @@ export default StyleSheet.create({
     marginTop: 3,
     lineHeight: 18,
     color: '#9B9B9B'
+  },
+
+  stickyShdow: {
+
   }
 });
