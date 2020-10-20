@@ -47,5 +47,27 @@ export default StyleSheet.create({
   },
   transition:{
 
+  },
+  stickyShdow: {
+    height: 20,
+    borderBottomLeftRadius: 13,
+    borderBottomRightRadius: 13,
+    shadowColor: 'rgba(0, 0, 0, .5)',
+    zIndex: 2,
+    // backgroundColor: 'rgba(221, 235, 240, 1)',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowRadius: 5
+  },
+  stickyShdowMark: {
+    height: 30,
+    position: 'absolute',
+    backgroundColor: 'rgba(255, 255, 255, 1)',
+    top: 0,
+    left: 0,
+    right: 0,
+    zIndex: 13
   }
 });

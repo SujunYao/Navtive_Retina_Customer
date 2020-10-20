@@ -55,16 +55,16 @@ const cardStyleInterpolatorFn = ({ current, next, inverted, layouts }: StackCard
             outputRange: [0, layouts.screen.height],
           }) || current.progress.interpolate({
             inputRange: [0, 1],
-            outputRange: [layouts.screen.height, 0],
+            outputRange: [layouts.screen.height, -20],
           })
         },
       ],
       opacity: next && next.progress.interpolate({
-        inputRange: [0, 1],
-        outputRange: [.8, 1],
+        inputRange: [0, .6, 1],
+        outputRange: [0, 0, 1],
       }) || current.progress.interpolate({
-        inputRange: [0, 1],
-        outputRange: [.8, 1],
+        inputRange: [0, .6, 1],
+        outputRange: [0, 0, 1],
       }),
     },
   };

@@ -8,4 +8,7 @@ I18n.translations = {
   zh
 };
 
+// TODO only for development, should be removed in production;
+I18n.locale = 'zh';
+
 export default I18n;

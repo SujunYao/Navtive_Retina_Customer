@@ -11,12 +11,12 @@ import styles from './constants/Shell';
 // import rootReducer from './reducers'
 import configureStore from './configureStore';
 
+
 const store = configureStore();
 
 export default function App() {
   const isLoadingComplete = useCachedResources();
   const colorScheme = useColorScheme();
-
   if (!isLoadingComplete) {
     return null;
   } else {
